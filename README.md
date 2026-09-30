@@ -32,17 +32,23 @@ cd weddingDj
 Then open `index.html` in a browser (or use a local server such as the
 VS Code *Live Server* extension).
 
-## Project structure (planned)
+## Project structure
 
 ```
 weddingDj/
   index.html      page markup
   css/style.css   styles
-  js/main.js      interactions (nav, form validation)
-  assets/         images and media
+  js/main.js      interactions (nav, gallery lightbox, form validation)
+  assets/         images and media (planned)
   README.md
 ```
 
 ## Status
 
-Work in progress – this repository currently contains only the README.
+Sample site with all sections in place. Still to do:
+
+- Replace the gradient placeholders in the gallery and About section with real
+  photos and video clips in `assets/`
+- Connect the enquiry form to a backend or form service (it currently only
+  validates and shows a confirmation message)
+- Swap the sample name, prices and contact details for real ones
