@@ -20,35 +20,49 @@ lets couples get in touch to check availability for their date.
 
 ## Tech
 
-Plain HTML, CSS and JavaScript – no build step required.
+[Astro](https://astro.build) static site. Requires Node.js 22.12 or newer.
 
 ## Getting started
 
 ```bash
 git clone <repo-url>
 cd weddingDj
+npm install
+npm run dev
 ```
 
-Then open `index.html` in a browser (or use a local server such as the
-VS Code *Live Server* extension).
+Then open http://localhost:4321.
+
+| Command           | What it does                                  |
+| ----------------- | --------------------------------------------- |
+| `npm run dev`     | Start the local dev server with live reload   |
+| `npm run build`   | Build the static site into `dist/`            |
+| `npm run preview` | Serve the built site from `dist/` locally     |
 
 ## Project structure
 
 ```
 weddingDj/
-  index.html      page markup
-  css/style.css   styles
-  js/main.js      interactions (nav, gallery lightbox, form validation)
-  assets/         images and media (planned)
-  README.md
+  src/
+    pages/index.astro     the page – puts the sections together
+    layouts/Layout.astro  <head>, fonts, global styles, scroll animations
+    components/           one component per section (Header, Hero, About, …)
+    data/site.ts          all content: services, packages, gallery, reviews, FAQ
+    styles/global.css     styles
+  public/                 static files copied as-is (images, favicon)
+  astro.config.mjs
+  package.json
 ```
+
+To change text, prices, reviews or FAQs, edit `src/data/site.ts`. The markup
+updates automatically.
 
 ## Status
 
 Sample site with all sections in place. Still to do:
 
 - Replace the gradient placeholders in the gallery and About section with real
-  photos and video clips in `assets/`
+  photos and video clips (Astro's `<Image />` component can optimise them)
 - Connect the enquiry form to a backend or form service (it currently only
   validates and shows a confirmation message)
 - Swap the sample name, prices and contact details for real ones

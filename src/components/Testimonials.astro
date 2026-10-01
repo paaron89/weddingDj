@@ -1,0 +1,18 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { testimonials } from "../data/site";
+---
+
+<section class="section" id="testimonials">
+  <div class="container">
+    <SectionHead eyebrow="Kind words" title="What couples say" />
+    <div class="grid grid-3">
+      {testimonials.map((t) => (
+        <blockquote class="quote">
+          <p>"{t.quote}"</p>
+          <footer>{t.couple} · {t.date}</footer>
+        </blockquote>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { services } from "../data/site";
+---
+
+<section class="section section-alt" id="services">
+  <div class="container">
+    <SectionHead eyebrow="Services" title="Everything your day needs to sound right" />
+    <div class="grid grid-3">
+      {services.map((service) => (
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">{service.icon}</div>
+          <h3>{service.title}</h3>
+          <p>{service.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+---
+import { business } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; <span id="year">{new Date().getFullYear()}</span> {business.name} {business.nameAccent}. Sample site.</p>
+    <a href="#top">Back to top &uarr;</a>
+  </div>
+</footer>
+
+<script>
+  // Keep the year current even if the site hasn't been rebuilt this year
+  document.getElementById("year")!.textContent = String(new Date().getFullYear());
+</script>
