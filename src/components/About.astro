@@ -1,0 +1,18 @@
+---
+import { business, stats } from "../data/site";
+---
+
+<section class="section" id="about">
+  <div class="container about">
+    <div class="about-photo" role="img" aria-label="Photo of the DJ behind the decks"></div>
+    <div>
+      <p class="eyebrow">About</p>
+      <h2>Hi, I'm {business.djName}</h2>
+      <p>I've played more than 300 weddings over the last 12 years, from barn weddings for 40 guests to ballroom receptions for 300. My style is simple: I learn what you love and what gets your families dancing, then I blend the two all night.</p>
+      <p>Before your day we'll plan your timeline together, build your must-play and do-not-play lists, and I'll coordinate with your venue and planner so you don't have to.</p>
+      <ul class="stats">
+        {stats.map((stat) => <li><strong>{stat.value}</strong><span>{stat.label}</span></li>)}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,153 @@
+---
+import { business, packages } from "../data/site";
+---
+
+<section class="section contact" id="contact">
+  <div class="container contact-grid">
+    <div>
+      <p class="eyebrow">Contact</p>
+      <h2>Check your date</h2>
+      <p>Tell me a bit about your wedding and I'll reply within 24 hours with availability and a tailored quote.</p>
+      <ul class="contact-details">
+        <li><strong>Email</strong> {business.email}</li>
+        <li><strong>Phone</strong> {business.phone}</li>
+        <li><strong>Based in</strong> {business.location}</li>
+      </ul>
+    </div>
+
+    <form class="form" id="enquiry-form" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="names">Your names</label>
+          <input id="names" name="names" type="text" placeholder="e.g. Sam & Jordan" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="date">Wedding date</label>
+          <input id="date" name="date" type="date" required />
+        </div>
+        <div class="field">
+          <label for="guests">Guest count</label>
+          <input id="guests" name="guests" type="number" min="1" placeholder="120" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="venue">Venue</label>
+          <input id="venue" name="venue" type="text" placeholder="Venue name or town" />
+        </div>
+        <div class="field">
+          <label for="package">Package</label>
+          <select id="package" name="package">
+            <option value="">Not sure yet</option>
+            {packages.map((pkg) => <option>{pkg.name}</option>)}
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Tell me about your music taste, your plans for the day…"></textarea>
+      </div>
+      <button type="submit" class="btn btn-block">Send enquiry</button>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("enquiry-form") as HTMLFormElement;
+  const status = form.querySelector<HTMLElement>(".form-status")!;
+  const namesInput = form.elements.namedItem("names") as HTMLInputElement;
+  const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+  const dateInput = form.elements.namedItem("date") as HTMLInputElement;
+  const packageSelect = form.elements.namedItem("package") as HTMLSelectElement;
+
+  // "Enquire" buttons on the packages pre-select that package
+  document.querySelectorAll<HTMLElement>("[data-package]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      packageSelect.value = btn.dataset.package ?? "";
+    });
+  });
+
+  // Wedding date can't be in the past (local date, not UTC)
+  const today = new Date();
+  dateInput.min = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  function setError(input: HTMLInputElement, message: string) {
+    const field = input.closest(".field")!;
+    let error = field.querySelector(".error");
+    field.classList.toggle("invalid", Boolean(message));
+    if (message) {
+      if (!error) {
+        error = document.createElement("span");
+        error.className = "error";
+        field.appendChild(error);
+      }
+      error.textContent = message;
+    } else {
+      error?.remove();
+    }
+  }
+
+  function validate() {
+    let valid = true;
+
+    if (!namesInput.value.trim()) {
+      setError(namesInput, "Please tell me your names.");
+      valid = false;
+    } else {
+      setError(namesInput, "");
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+      setError(emailInput, "Please enter a valid email address.");
+      valid = false;
+    } else {
+      setError(emailInput, "");
+    }
+
+    if (!dateInput.value) {
+      setError(dateInput, "Please choose your wedding date.");
+      valid = false;
+    } else if (dateInput.value < dateInput.min) {
+      setError(dateInput, "That date has already passed.");
+      valid = false;
+    } else {
+      setError(dateInput, "");
+    }
+
+    return valid;
+  }
+
+  form.addEventListener("input", (e) => {
+    if ((e.target as Element).closest(".field.invalid")) validate();
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!validate()) {
+      status.textContent = "";
+      form.querySelector<HTMLInputElement>(".field.invalid input")?.focus();
+      return;
+    }
+
+    // Sample site: no backend. Hook this up to a form service or API later.
+    const names = namesInput.value.trim();
+    const date = new Date(dateInput.value + "T00:00:00").toLocaleDateString(undefined, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    status.textContent = `Thanks, ${names}! I'll check ${date} and get back to you within 24 hours.`;
+    form.reset();
+  });
+</script>

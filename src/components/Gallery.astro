@@ -1,0 +1,69 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { gallery } from "../data/site";
+---
+
+<section class="section section-alt" id="gallery">
+  <div class="container">
+    <SectionHead eyebrow="Gallery" title="Moments from past weddings" />
+    <div class="gallery">
+      {gallery.map((item) => (
+        <figure
+          class:list={["g-item", `g-${item.variant}`, { "is-video": item.video }]}
+          tabindex="0"
+          role="button"
+        >
+          <figcaption>{item.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Gallery preview">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <div>
+      <div class="lightbox-frame"></div>
+      <p class="lightbox-caption"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const lightbox = document.querySelector<HTMLElement>(".lightbox")!;
+  const frame = lightbox.querySelector<HTMLElement>(".lightbox-frame")!;
+  const caption = lightbox.querySelector<HTMLElement>(".lightbox-caption")!;
+  const closeButton = lightbox.querySelector<HTMLButtonElement>(".lightbox-close")!;
+  let lastFocus: HTMLElement | null = null;
+
+  function openLightbox(item: HTMLElement) {
+    lastFocus = item;
+    frame.style.background = getComputedStyle(item).backgroundImage;
+    caption.textContent = item.querySelector("figcaption")?.textContent ?? "";
+    lightbox.classList.add("open");
+    closeButton.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lastFocus?.focus();
+  }
+
+  document.querySelectorAll<HTMLElement>(".g-item").forEach((item) => {
+    item.addEventListener("click", () => openLightbox(item));
+    item.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openLightbox(item);
+      }
+    });
+  });
+
+  lightbox.addEventListener("click", (e) => {
+    const target = e.target as Element;
+    if (target === lightbox || target.closest(".lightbox-close")) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+  });
+</script>
