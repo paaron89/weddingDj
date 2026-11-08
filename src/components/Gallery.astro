@@ -1,18 +1,36 @@
 ---
+import { Image, getImage } from "astro:assets";
 import SectionHead from "./SectionHead.astro";
 import { gallery } from "../data/site";
+
+// Larger version of each photo for the lightbox
+const items = await Promise.all(
+  gallery.map(async (item) => ({
+    ...item,
+    full: (await getImage({ src: item.image, width: 1600 })).src,
+  }))
+);
 ---
 
-<section class="section section-alt" id="gallery">
+<section class="section section-blush" id="gallery">
   <div class="container">
-    <SectionHead eyebrow="Gallery" title="Moments from past weddings" />
+    <SectionHead eyebrow="gallery" title="Moments from past weddings" />
     <div class="gallery">
-      {gallery.map((item) => (
+      {items.map((item) => (
         <figure
-          class:list={["g-item", `g-${item.variant}`, { "is-video": item.video }]}
+          class:list={["g-item", { "g-tall": item.layout === "tall", "g-wide": item.layout === "wide" }]}
           tabindex="0"
           role="button"
+          aria-label={`Open photo: ${item.caption}`}
+          data-full={item.full}
         >
+          <Image
+            src={item.image}
+            alt={item.alt}
+            widths={[400, 700, 1000]}
+            sizes={item.layout === "wide" ? "(max-width: 700px) 100vw, 760px" : "(max-width: 700px) 50vw, 380px"}
+          />
+          {item.video && <span class="play" aria-hidden="true"></span>}
           <figcaption>{item.caption}</figcaption>
         </figure>
       ))}
@@ -21,30 +39,34 @@ import { gallery } from "../data/site";
 
   <div class="lightbox" role="dialog" aria-modal="true" aria-label="Gallery preview">
     <button class="lightbox-close" aria-label="Close">&times;</button>
-    <div>
-      <div class="lightbox-frame"></div>
-      <p class="lightbox-caption"></p>
-    </div>
+    <figure class="lightbox-inner">
+      <img class="lightbox-img" alt="" />
+      <figcaption class="lightbox-caption"></figcaption>
+    </figure>
   </div>
 </section>
 
 <script>
   const lightbox = document.querySelector<HTMLElement>(".lightbox")!;
-  const frame = lightbox.querySelector<HTMLElement>(".lightbox-frame")!;
+  const img = lightbox.querySelector<HTMLImageElement>(".lightbox-img")!;
   const caption = lightbox.querySelector<HTMLElement>(".lightbox-caption")!;
   const closeButton = lightbox.querySelector<HTMLButtonElement>(".lightbox-close")!;
   let lastFocus: HTMLElement | null = null;
 
   function openLightbox(item: HTMLElement) {
     lastFocus = item;
-    frame.style.background = getComputedStyle(item).backgroundImage;
+    const thumb = item.querySelector("img")!;
+    img.src = item.dataset.full ?? thumb.currentSrc;
+    img.alt = thumb.alt;
     caption.textContent = item.querySelector("figcaption")?.textContent ?? "";
     lightbox.classList.add("open");
+    document.body.style.overflow = "hidden";
     closeButton.focus();
   }
 
   function closeLightbox() {
     lightbox.classList.remove("open");
+    document.body.style.overflow = "";
     lastFocus?.focus();
   }
 

@@ -1,4 +1,16 @@
 // All page content lives here so it can be edited without touching markup.
+// Photos are free stock images from Unsplash – see src/assets/photos/CREDITS.md.
+
+import heroBarnLights from "../assets/photos/hero-barn-lights.jpg";
+import djAlex from "../assets/photos/dj-alex.jpg";
+import firstDanceConfetti from "../assets/photos/first-dance-confetti.jpg";
+import firstDanceSmoke from "../assets/photos/first-dance-smoke.jpg";
+import danceFloor from "../assets/photos/dance-floor.jpg";
+import ceremonyNightAisle from "../assets/photos/ceremony-night-aisle.jpg";
+import brideDancing from "../assets/photos/bride-dancing.jpg";
+import beachRecessional from "../assets/photos/beach-recessional.jpg";
+import dinnerStringLights from "../assets/photos/dinner-string-lights.jpg";
+import ringsBouquet from "../assets/photos/rings-bouquet.jpg";
 
 export const business = {
   name: "Evergreen",
@@ -9,44 +21,52 @@ export const business = {
   location: "Portland, OR · travels nationwide",
 };
 
+export const photos = {
+  hero: { src: heroBarnLights, alt: "Barn reception hall draped in fairy lights and sheer curtains" },
+  about: { src: djAlex, alt: "Alex mixing music behind the DJ decks" },
+  testimonials: { src: dinnerStringLights, alt: "Wedding guests dining under trees strung with lights" },
+  contact: { src: ringsBouquet, alt: "Wedding rings resting on a pale pink bouquet" },
+};
+
 export const stats = [
   { value: "300+", label: "weddings" },
   { value: "12", label: "years" },
   { value: "5.0", label: "average rating" },
 ];
 
+// `icon` matches a name in src/components/Icon.astro
 export const services = [
   {
-    icon: "⚭",
+    icon: "rings",
     title: "Ceremony music",
     text: "Wireless mics for your officiant and vows, plus perfectly timed music for the processional, signing and recessional.",
   },
   {
-    icon: "☕",
+    icon: "glasses",
     title: "Cocktail hour",
     text: "Relaxed background sets while you take photos, whether that's jazz, acoustic covers or something to match your theme.",
   },
   {
-    icon: "♫",
+    icon: "music",
     title: "Reception & dance floor",
     text: "Mixed live and adjusted to the crowd, with music for every generation and a floor that stays full until the last song.",
   },
   {
-    icon: "🎤",
+    icon: "mic",
     title: "MC services",
     text: "Friendly, well-paced announcements for entrances, speeches, cake cutting and the send-off, with no cheesy gimmicks.",
   },
   {
-    icon: "✨",
+    icon: "sparkle",
     title: "Lighting",
     text: "Uplighting in your colours, dance floor effects and a monogram projection to change the feel of the room.",
   },
   {
-    icon: "📋",
+    icon: "calendar",
     title: "Planning",
     text: "An online planner, a timeline meeting and a call with your venue so the day runs on time.",
   },
-];
+] as const;
 
 export type Package = {
   name: string;
@@ -91,15 +111,14 @@ export const packages: Package[] = [
   },
 ];
 
-// `variant` picks a gradient placeholder from global.css (.g-1 … .g-6).
-// Replace with real images in public/ or src/assets/ later.
+// `layout` controls the tile size in the gallery grid: "tall", "wide" or "" (normal).
 export const gallery = [
-  { caption: "First dance · Willow Barn", variant: 1 },
-  { caption: "Uplighting · The Grand Hall", variant: 2 },
-  { caption: "Dance floor clip · Lakeside Manor", variant: 3, video: true },
-  { caption: "Ceremony · Rose Garden", variant: 4 },
-  { caption: "Last dance sparklers", variant: 5 },
-  { caption: "Grand entrance clip", variant: 6, video: true },
+  { image: firstDanceConfetti, alt: "Couple sharing their first dance under falling confetti", caption: "First dance · The Grand Hall", layout: "tall" },
+  { image: firstDanceSmoke, alt: "Bride and groom dancing on a cloud of low smoke", caption: "Dancing on the clouds", layout: "" },
+  { image: brideDancing, alt: "Bride dancing with guests under festoon lights", caption: "Reception · Willow Barn", layout: "tall" },
+  { image: ceremonyNightAisle, alt: "Evening ceremony aisle lit with fairy lights", caption: "Evening ceremony · Hillside Garden", layout: "" },
+  { image: danceFloor, alt: "Guests dancing with glow sticks on a packed dance floor", caption: "Packed dance floor · Lakeside Manor", layout: "", video: true },
+  { image: beachRecessional, alt: "Newlyweds walking back down a beach aisle as guests cheer", caption: "Just married · Beach ceremony", layout: "wide", video: true },
 ];
 
 export const testimonials = [

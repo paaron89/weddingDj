@@ -13,7 +13,10 @@ const links = [
 
 <header class="site-header" id="top">
   <nav class="nav container" aria-label="Main">
-    <a href="#top" class="logo">{business.name} <span>{business.nameAccent}</span></a>
+    <a href="#top" class="logo">
+      <span class="logo-script">{business.name}</span>
+      <span class="logo-caps">{business.nameAccent}</span>
+    </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -29,9 +32,9 @@ const links = [
   const toggle = document.querySelector<HTMLButtonElement>(".nav-toggle")!;
   const menu = document.getElementById("nav-menu")!;
 
-  // Sticky header shadow
+  // Header is transparent over the hero photo, solid once you scroll
   function onScroll() {
-    header.classList.toggle("scrolled", window.scrollY > 10);
+    header.classList.toggle("scrolled", window.scrollY > 40);
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
@@ -39,6 +42,7 @@ const links = [
   // Mobile nav
   function setMenu(open: boolean) {
     menu.classList.toggle("open", open);
+    header.classList.toggle("menu-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   }

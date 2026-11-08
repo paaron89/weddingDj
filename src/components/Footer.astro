@@ -4,8 +4,16 @@ import { business } from "../data/site";
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <p>&copy; <span id="year">{new Date().getFullYear()}</span> {business.name} {business.nameAccent}. Sample site.</p>
-    <a href="#top">Back to top &uarr;</a>
+    <a href="#top" class="logo logo-light">
+      <span class="logo-script">{business.name}</span>
+      <span class="logo-caps">{business.nameAccent}</span>
+    </a>
+    <p class="footer-tagline">Wedding DJ &amp; MC · {business.location}</p>
+    <p class="footer-small">
+      &copy; <span id="year">{new Date().getFullYear()}</span> {business.name} {business.nameAccent}. Sample site
+      {" · "}Photos from <a href="https://unsplash.com" rel="noopener">Unsplash</a>
+      {" · "}<a href="#top">Back to top &uarr;</a>
+    </p>
   </div>
 </footer>
 

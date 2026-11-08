@@ -1,16 +1,28 @@
 ---
+import { Image } from "astro:assets";
 import SectionHead from "./SectionHead.astro";
-import { testimonials } from "../data/site";
+import { photos, testimonials } from "../data/site";
 ---
 
-<section class="section" id="testimonials">
+<section class="section section-photo" id="testimonials">
+  <Image
+    src={photos.testimonials.src}
+    alt=""
+    class="section-photo-bg"
+    widths={[800, 1400, 2000]}
+    sizes="100vw"
+  />
   <div class="container">
-    <SectionHead eyebrow="Kind words" title="What couples say" />
+    <SectionHead eyebrow="kind words" title="What couples say" />
     <div class="grid grid-3">
       {testimonials.map((t) => (
         <blockquote class="quote">
-          <p>"{t.quote}"</p>
-          <footer>{t.couple} · {t.date}</footer>
+          <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+          <p>{t.quote}</p>
+          <footer>
+            <span class="script">{t.couple}</span>
+            <small>{t.date}</small>
+          </footer>
         </blockquote>
       ))}
     </div>

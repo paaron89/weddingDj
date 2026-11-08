@@ -61,8 +61,8 @@ updates automatically.
 
 Sample site with all sections in place. Still to do:
 
-- Replace the gradient placeholders in the gallery and About section with real
-  photos and video clips (Astro's `<Image />` component can optimise them)
+- Replace the Unsplash stock photos in `src/assets/photos/` with the DJ's own
+  photos and video clips (credits for the current ones are in `CREDITS.md`)
 - Connect the enquiry form to a backend or form service (it currently only
   validates and shows a confirmation message)
 - Swap the sample name, prices and contact details for real ones
