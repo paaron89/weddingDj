@@ -1,18 +1,23 @@
 ---
-import { business, packages } from "../data/site";
+import { Image } from "astro:assets";
+import SectionHead from "./SectionHead.astro";
+import { business, packages, photos } from "../data/site";
 ---
 
-<section class="section contact" id="contact">
+<section class="section section-blush contact" id="contact">
   <div class="container contact-grid">
-    <div>
-      <p class="eyebrow">Contact</p>
-      <h2>Check your date</h2>
-      <p>Tell me a bit about your wedding and I'll reply within 24 hours with availability and a tailored quote.</p>
+    <div class="contact-intro">
+      <SectionHead eyebrow="say hello" title="Check your date" align="left">
+        <p>Tell me a bit about your wedding and I'll reply within 24 hours with availability and a tailored quote.</p>
+      </SectionHead>
       <ul class="contact-details">
         <li><strong>Email</strong> {business.email}</li>
         <li><strong>Phone</strong> {business.phone}</li>
         <li><strong>Based in</strong> {business.location}</li>
       </ul>
+      <div class="arch-frame arch-small">
+        <Image src={photos.contact.src} alt={photos.contact.alt} widths={[300, 600]} sizes="300px" />
+      </div>
     </div>
 
     <form class="form" id="enquiry-form" novalidate>

@@ -1,0 +1,25 @@
+---
+// Small decorative divider: line – dot – diamond – dot – line.
+interface Props {
+  align?: "center" | "left";
+}
+
+const { align = "center" } = Astro.props;
+---
+
+<svg
+  class:list={["ornament", { "ornament-left": align === "left" }]}
+  viewBox="0 0 140 16"
+  width="140"
+  height="16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1"
+  aria-hidden="true"
+>
+  <path d="M0 8h52M88 8h52" />
+  <circle cx="59" cy="8" r="1.6" fill="currentColor" stroke="none" />
+  <circle cx="81" cy="8" r="1.6" fill="currentColor" stroke="none" />
+  <path d="M70 2.5l5.5 5.5-5.5 5.5-5.5-5.5z" />
+  <path d="M70 5.5l2.5 2.5-2.5 2.5-2.5-2.5z" fill="currentColor" stroke="none" />
+</svg>

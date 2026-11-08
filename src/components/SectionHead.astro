@@ -1,14 +1,18 @@
 ---
+import Ornament from "./Ornament.astro";
+
 interface Props {
   eyebrow: string;
   title: string;
+  align?: "center" | "left";
 }
 
-const { eyebrow, title } = Astro.props;
+const { eyebrow, title, align = "center" } = Astro.props;
 ---
 
-<div class="section-head">
-  <p class="eyebrow">{eyebrow}</p>
+<div class:list={["section-head", { "section-head-left": align === "left" }]}>
+  <p class="script eyebrow">{eyebrow}</p>
   <h2>{title}</h2>
+  <Ornament align={align} />
   <slot />
 </div>

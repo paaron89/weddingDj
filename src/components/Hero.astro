@@ -1,12 +1,89 @@
-<section class="hero">
-  <div class="hero-overlay"></div>
+---
+import { Image } from "astro:assets";
+import Ornament from "./Ornament.astro";
+import { photos } from "../data/site";
+
+// Floating "fairy light" bokeh dots for the middle parallax layer.
+// A seeded random generator keeps the layout the same on every build.
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+const lights = Array.from({ length: 28 }, () => {
+  const size = 4 + rand() * 20;
+  return {
+    x: rand() * 100,
+    y: rand() * 100,
+    size,
+    blur: size > 14 ? (size - 12) / 3 : 0,
+    opacity: 0.3 + rand() * 0.5,
+    duration: 9 + rand() * 12,
+    delay: -rand() * 20,
+  };
+});
+---
+
+<section class="hero" data-parallax>
+  <div class="hero-layer hero-photo">
+    <Image
+      src={photos.hero.src}
+      alt={photos.hero.alt}
+      class="hero-bg"
+      widths={[800, 1400, 2000, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="hero-layer hero-lights" aria-hidden="true">
+    {lights.map((l) => (
+      <span
+        style={`--x:${l.x.toFixed(1)}%;--y:${l.y.toFixed(1)}%;--size:${l.size.toFixed(1)}px;--blur:${l.blur.toFixed(1)}px;--o:${l.opacity.toFixed(2)};--dur:${l.duration.toFixed(1)}s;--delay:${l.delay.toFixed(1)}s`}
+      ></span>
+    ))}
+  </div>
   <div class="hero-content container">
-    <p class="eyebrow">Wedding DJ &amp; MC</p>
-    <h1>Your first dance to the last song, done right</h1>
+    <p class="hero-kicker">Wedding DJ &amp; MC · Portland</p>
+    <p class="script hero-script">Let's dance</p>
+    <h1>Your first dance to the last song, done&nbsp;right</h1>
+    <Ornament />
     <p class="lead">From the processional to the last dance, I read the room and keep your guests on the dance floor.</p>
     <div class="hero-actions">
       <a href="#contact" class="btn">Check your date</a>
       <a href="#packages" class="btn btn-ghost">View packages</a>
     </div>
   </div>
+  <a href="#about" class="scroll-cue" aria-label="Scroll to About"><span></span></a>
 </section>
+
+<script>
+  // Layered parallax: each layer moves up/down at a different speed while
+  // scrolling, so the photo feels far away and the lights feel closer.
+  const hero = document.querySelector<HTMLElement>("[data-parallax]")!;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!reduceMotion) {
+    let visible = true;
+    let frame = 0;
+
+    function render() {
+      frame = 0;
+      const scroll = Math.min(window.scrollY, hero.offsetHeight);
+      hero.style.setProperty("--sy", scroll.toFixed(1));
+      hero.style.setProperty("--fade", (1 - scroll / (hero.offsetHeight * 0.7)).toFixed(3));
+    }
+
+    function requestRender() {
+      if (!frame && visible) frame = requestAnimationFrame(render);
+    }
+
+    window.addEventListener("scroll", requestRender, { passive: true });
+
+    // Pause the work while the hero is off screen
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      requestRender();
+    }).observe(hero);
+
+    requestRender();
+  }
+</script>
