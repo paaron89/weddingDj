@@ -1,11 +1,13 @@
 ---
 import { Image, getImage } from "astro:assets";
 import SectionHead from "./SectionHead.astro";
-import { gallery } from "../data/site";
+import { useContent } from "../i18n";
+
+const { gallery } = useContent(Astro.currentLocale);
 
 // Larger version of each photo for the lightbox
 const items = await Promise.all(
-  gallery.map(async (item) => ({
+  gallery.items.map(async (item) => ({
     ...item,
     full: (await getImage({ src: item.image, width: 1600 })).src,
   }))
@@ -14,14 +16,14 @@ const items = await Promise.all(
 
 <section class="section section-blush" id="gallery">
   <div class="container">
-    <SectionHead eyebrow="gallery" title="Moments from past weddings" />
+    <SectionHead eyebrow={gallery.eyebrow} title={gallery.title} />
     <div class="gallery">
       {items.map((item) => (
         <figure
           class:list={["g-item", { "g-tall": item.layout === "tall", "g-wide": item.layout === "wide" }]}
           tabindex="0"
           role="button"
-          aria-label={`Open photo: ${item.caption}`}
+          aria-label={`${gallery.openLabel}: ${item.caption}`}
           data-full={item.full}
         >
           <Image
@@ -37,8 +39,8 @@ const items = await Promise.all(
     </div>
   </div>
 
-  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Gallery preview">
-    <button class="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label={gallery.previewLabel}>
+    <button class="lightbox-close" aria-label={gallery.closeLabel}>&times;</button>
     <figure class="lightbox-inner">
       <img class="lightbox-img" alt="" />
       <figcaption class="lightbox-caption"></figcaption>

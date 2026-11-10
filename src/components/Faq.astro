@@ -1,16 +1,18 @@
 ---
 import SectionHead from "./SectionHead.astro";
-import { faqs } from "../data/site";
+import { useContent } from "../i18n";
+
+const { faq } = useContent(Astro.currentLocale);
 ---
 
 <section class="section" id="faq">
   <div class="container narrow">
-    <SectionHead eyebrow="good to know" title="Questions couples ask" />
+    <SectionHead eyebrow={faq.eyebrow} title={faq.title} />
     <div class="faq">
-      {faqs.map((faq) => (
+      {faq.items.map((item) => (
         <details>
-          <summary>{faq.question}</summary>
-          <p>{faq.answer}</p>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
         </details>
       ))}
     </div>

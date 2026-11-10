@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { getLang, homeUrl, languages, type Lang } from "../i18n";
 
 interface Props {
   title: string;
@@ -7,15 +8,19 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const lang = getLang(Astro.currentLocale);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {Object.keys(languages).map((l) => (
+      <link rel="alternate" hreflang={l} href={homeUrl(l as Lang)} />
+    ))}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

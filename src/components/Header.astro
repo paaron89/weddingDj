@@ -1,28 +1,43 @@
 ---
 import { business } from "../data/site";
+import { getLang, homeUrl, languages, useContent, type Lang } from "../i18n";
 
-const links = [
-  { href: "#about", label: "About" },
-  { href: "#services", label: "Services" },
-  { href: "#packages", label: "Packages" },
-  { href: "#gallery", label: "Gallery" },
-  { href: "#testimonials", label: "Reviews" },
-  { href: "#faq", label: "FAQ" },
-];
+const t = useContent(Astro.currentLocale);
+const currentLang = getLang(Astro.currentLocale);
 ---
 
 <header class="site-header" id="top">
-  <nav class="nav container" aria-label="Main">
+  <nav class="nav container" aria-label={t.nav.label}>
     <a href="#top" class="logo">
       <span class="logo-script">{business.name}</span>
       <span class="logo-caps">{business.nameAccent}</span>
     </a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+    <button
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label={t.nav.openMenu}
+      data-open-label={t.nav.openMenu}
+      data-close-label={t.nav.closeMenu}
+    >
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-menu" id="nav-menu">
-      {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
-      <li><a href="#contact" class="btn btn-small">Check your date</a></li>
+      {t.nav.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      <li class="lang-switch" role="group" aria-label={t.nav.languageLabel}>
+        {(Object.keys(languages) as Lang[]).map((lang) => (
+          <a
+            href={homeUrl(lang)}
+            hreflang={lang}
+            lang={lang}
+            title={languages[lang]}
+            aria-current={lang === currentLang ? "page" : undefined}
+          >
+            {lang.toUpperCase()}
+          </a>
+        ))}
+      </li>
+      <li><a href="#contact" class="btn btn-small">{t.nav.cta}</a></li>
     </ul>
   </nav>
 </header>
@@ -44,7 +59,7 @@ const links = [
     menu.classList.toggle("open", open);
     header.classList.toggle("menu-open", open);
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    toggle.setAttribute("aria-label", (open ? toggle.dataset.closeLabel : toggle.dataset.openLabel) ?? "");
   }
 
   toggle.addEventListener("click", () => setMenu(!menu.classList.contains("open")));

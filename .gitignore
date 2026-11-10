@@ -9,6 +9,7 @@ node_modules/
 
 # logs
 npm-debug.log*
+.playwright-mcp/
 
 # environment variables
 .env

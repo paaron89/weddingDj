@@ -1,14 +1,16 @@
 ---
 import SectionHead from "./SectionHead.astro";
 import Icon from "./Icon.astro";
-import { services } from "../data/site";
+import { useContent } from "../i18n";
+
+const { services } = useContent(Astro.currentLocale);
 ---
 
 <section class="section section-blush" id="services">
   <div class="container">
-    <SectionHead eyebrow="services" title="Everything your day needs to sound right" />
+    <SectionHead eyebrow={services.eyebrow} title={services.title} />
     <div class="grid grid-3">
-      {services.map((service) => (
+      {services.items.map((service) => (
         <article class="card">
           <div class="card-icon"><Icon name={service.icon} /></div>
           <h3>{service.title}</h3>
