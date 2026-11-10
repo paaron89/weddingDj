@@ -1,64 +1,75 @@
 ---
 import { Image } from "astro:assets";
 import SectionHead from "./SectionHead.astro";
-import { business, packages, photos } from "../data/site";
+import { business, images } from "../data/site";
+import { getLang, useContent } from "../i18n";
+
+const { contact, packages } = useContent(Astro.currentLocale);
+const lang = getLang(Astro.currentLocale);
+const f = contact.form;
 ---
 
 <section class="section section-blush contact" id="contact">
   <div class="container contact-grid">
     <div class="contact-intro">
-      <SectionHead eyebrow="say hello" title="Check your date" align="left">
-        <p>Tell me a bit about your wedding and I'll reply within 24 hours with availability and a tailored quote.</p>
+      <SectionHead eyebrow={contact.eyebrow} title={contact.title} align="left">
+        <p>{contact.lead}</p>
       </SectionHead>
       <ul class="contact-details">
-        <li><strong>Email</strong> {business.email}</li>
-        <li><strong>Phone</strong> {business.phone}</li>
-        <li><strong>Based in</strong> {business.location}</li>
+        <li><strong>{contact.details.email}</strong> {business.email}</li>
+        <li><strong>{contact.details.phone}</strong> {business.phone}</li>
+        <li><strong>{contact.details.location}</strong> {contact.location}</li>
       </ul>
       <div class="arch-frame arch-small">
-        <Image src={photos.contact.src} alt={photos.contact.alt} widths={[300, 600]} sizes="300px" />
+        <Image src={images.contact} alt={contact.imageAlt} widths={[300, 600]} sizes="300px" />
       </div>
     </div>
 
-    <form class="form" id="enquiry-form" novalidate>
+    <form
+      class="form"
+      id="enquiry-form"
+      novalidate
+      data-locale={lang}
+      data-messages={JSON.stringify(contact.messages)}
+    >
       <div class="form-row">
         <div class="field">
-          <label for="names">Your names</label>
-          <input id="names" name="names" type="text" placeholder="e.g. Sam & Jordan" required />
+          <label for="names">{f.names}</label>
+          <input id="names" name="names" type="text" placeholder={f.namesPlaceholder} required />
         </div>
         <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          <label for="email">{f.email}</label>
+          <input id="email" name="email" type="email" placeholder={f.emailPlaceholder} required />
         </div>
       </div>
       <div class="form-row">
         <div class="field">
-          <label for="date">Wedding date</label>
+          <label for="date">{f.date}</label>
           <input id="date" name="date" type="date" required />
         </div>
         <div class="field">
-          <label for="guests">Guest count</label>
+          <label for="guests">{f.guests}</label>
           <input id="guests" name="guests" type="number" min="1" placeholder="120" />
         </div>
       </div>
       <div class="form-row">
         <div class="field">
-          <label for="venue">Venue</label>
-          <input id="venue" name="venue" type="text" placeholder="Venue name or town" />
+          <label for="venue">{f.venue}</label>
+          <input id="venue" name="venue" type="text" placeholder={f.venuePlaceholder} />
         </div>
         <div class="field">
-          <label for="package">Package</label>
+          <label for="package">{f.package}</label>
           <select id="package" name="package">
-            <option value="">Not sure yet</option>
-            {packages.map((pkg) => <option>{pkg.name}</option>)}
+            <option value="">{f.packageUnsure}</option>
+            {packages.items.map((pkg) => <option>{pkg.name}</option>)}
           </select>
         </div>
       </div>
       <div class="field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" placeholder="Tell me about your music taste, your plans for the day…"></textarea>
+        <label for="message">{f.message}</label>
+        <textarea id="message" name="message" rows="4" placeholder={f.messagePlaceholder}></textarea>
       </div>
-      <button type="submit" class="btn btn-block">Send enquiry</button>
+      <button type="submit" class="btn btn-block">{f.submit}</button>
       <p class="form-status" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -71,6 +82,10 @@ import { business, packages, photos } from "../data/site";
   const emailInput = form.elements.namedItem("email") as HTMLInputElement;
   const dateInput = form.elements.namedItem("date") as HTMLInputElement;
   const packageSelect = form.elements.namedItem("package") as HTMLSelectElement;
+
+  // Texts in the page's language, rendered into data attributes by Astro
+  const locale = form.dataset.locale;
+  const messages: Record<string, string> = JSON.parse(form.dataset.messages ?? "{}");
 
   // "Enquire" buttons on the packages pre-select that package
   document.querySelectorAll<HTMLElement>("[data-package]").forEach((btn) => {
@@ -107,24 +122,24 @@ import { business, packages, photos } from "../data/site";
     let valid = true;
 
     if (!namesInput.value.trim()) {
-      setError(namesInput, "Please tell me your names.");
+      setError(namesInput, messages.namesRequired);
       valid = false;
     } else {
       setError(namesInput, "");
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-      setError(emailInput, "Please enter a valid email address.");
+      setError(emailInput, messages.emailInvalid);
       valid = false;
     } else {
       setError(emailInput, "");
     }
 
     if (!dateInput.value) {
-      setError(dateInput, "Please choose your wedding date.");
+      setError(dateInput, messages.dateRequired);
       valid = false;
     } else if (dateInput.value < dateInput.min) {
-      setError(dateInput, "That date has already passed.");
+      setError(dateInput, messages.datePast);
       valid = false;
     } else {
       setError(dateInput, "");
@@ -147,12 +162,12 @@ import { business, packages, photos } from "../data/site";
 
     // Sample site: no backend. Hook this up to a form service or API later.
     const names = namesInput.value.trim();
-    const date = new Date(dateInput.value + "T00:00:00").toLocaleDateString(undefined, {
+    const date = new Date(dateInput.value + "T00:00:00").toLocaleDateString(locale, {
       day: "numeric",
       month: "long",
       year: "numeric",
     });
-    status.textContent = `Thanks, ${names}! I'll check ${date} and get back to you within 24 hours.`;
+    status.textContent = messages.success.replace("{names}", names).replace("{date}", date);
     form.reset();
   });
 </script>

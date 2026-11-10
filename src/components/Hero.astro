@@ -1,7 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import Ornament from "./Ornament.astro";
-import { photos } from "../data/site";
+import { images } from "../data/site";
+import { useContent } from "../i18n";
+
+const t = useContent(Astro.currentLocale);
 
 // Floating "fairy light" bokeh dots for the middle parallax layer.
 // A seeded random generator keeps the layout the same on every build.
@@ -25,8 +28,8 @@ const lights = Array.from({ length: 28 }, () => {
 <section class="hero" data-parallax>
   <div class="hero-layer hero-photo">
     <Image
-      src={photos.hero.src}
-      alt={photos.hero.alt}
+      src={images.hero}
+      alt={t.hero.imageAlt}
       class="hero-bg"
       widths={[800, 1400, 2000, 2400]}
       sizes="100vw"
@@ -42,17 +45,17 @@ const lights = Array.from({ length: 28 }, () => {
     ))}
   </div>
   <div class="hero-content container">
-    <p class="hero-kicker">Wedding DJ &amp; MC · Portland</p>
-    <p class="script hero-script">Let's dance</p>
-    <h1>Your first dance to the last song, done&nbsp;right</h1>
+    <p class="hero-kicker">{t.hero.kicker}</p>
+    <p class="script hero-script">{t.hero.script}</p>
+    <h1>{t.hero.title}</h1>
     <Ornament />
-    <p class="lead">From the processional to the last dance, I read the room and keep your guests on the dance floor.</p>
+    <p class="lead">{t.hero.lead}</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn">Check your date</a>
-      <a href="#packages" class="btn btn-ghost">View packages</a>
+      <a href="#contact" class="btn">{t.hero.primary}</a>
+      <a href="#packages" class="btn btn-ghost">{t.hero.secondary}</a>
     </div>
   </div>
-  <a href="#about" class="scroll-cue" aria-label="Scroll to About"><span></span></a>
+  <a href="#about" class="scroll-cue" aria-label={t.hero.scrollLabel}><span></span></a>
 </section>
 
 <script>

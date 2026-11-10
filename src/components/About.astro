@@ -1,7 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import SectionHead from "./SectionHead.astro";
-import { business, photos, stats } from "../data/site";
+import { business, images } from "../data/site";
+import { useContent } from "../i18n";
+
+const { about } = useContent(Astro.currentLocale);
 ---
 
 <section class="section" id="about">
@@ -9,20 +12,19 @@ import { business, photos, stats } from "../data/site";
     <div class="about-media">
       <div class="arch-frame">
         <Image
-          src={photos.about.src}
-          alt={photos.about.alt}
+          src={images.about}
+          alt={about.imageAlt}
           widths={[400, 700, 1000]}
           sizes="(max-width: 900px) 80vw, 440px"
         />
       </div>
     </div>
     <div class="about-text">
-      <SectionHead eyebrow="about me" title={`Hi, I'm ${business.djName}`} align="left" />
-      <p>I've played more than 300 weddings over the last 12 years, from barn weddings for 40 guests to ballroom receptions for 300. My style is simple: I learn what you love and what gets your families dancing, then I blend the two all night.</p>
-      <p>Before your day we'll plan your timeline together, build your must-play and do-not-play lists, and I'll coordinate with your venue and planner so you don't have to.</p>
+      <SectionHead eyebrow={about.eyebrow} title={about.title} align="left" />
+      {about.paragraphs.map((text) => <p>{text}</p>)}
       <p class="script signature">{business.djName}</p>
       <ul class="stats">
-        {stats.map((stat) => <li><strong>{stat.value}</strong><span>{stat.label}</span></li>)}
+        {about.stats.map((stat) => <li><strong>{stat.value}</strong><span>{stat.label}</span></li>)}
       </ul>
     </div>
   </div>

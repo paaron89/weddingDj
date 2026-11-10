@@ -1,5 +1,8 @@
 ---
 import { business } from "../data/site";
+import { useContent } from "../i18n";
+
+const { footer } = useContent(Astro.currentLocale);
 ---
 
 <footer class="site-footer">
@@ -8,11 +11,11 @@ import { business } from "../data/site";
       <span class="logo-script">{business.name}</span>
       <span class="logo-caps">{business.nameAccent}</span>
     </a>
-    <p class="footer-tagline">Wedding DJ &amp; MC · {business.location}</p>
+    <p class="footer-tagline">{footer.tagline}</p>
     <p class="footer-small">
-      &copy; <span id="year">{new Date().getFullYear()}</span> {business.name} {business.nameAccent}. Sample site
-      {" · "}Photos from <a href="https://unsplash.com" rel="noopener">Unsplash</a>
-      {" · "}<a href="#top">Back to top &uarr;</a>
+      &copy; <span id="year">{new Date().getFullYear()}</span> {business.name} {business.nameAccent}. {footer.sample}
+      {" · "}{footer.photosFrom} <a href="https://unsplash.com" rel="noopener">Unsplash</a>
+      {" · "}<a href="#top">{footer.backToTop} &uarr;</a>
     </p>
   </div>
 </footer>

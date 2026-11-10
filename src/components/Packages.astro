@@ -1,17 +1,19 @@
 ---
 import SectionHead from "./SectionHead.astro";
-import { packages } from "../data/site";
+import { useContent } from "../i18n";
+
+const { packages } = useContent(Astro.currentLocale);
 ---
 
 <section class="section" id="packages">
   <div class="container">
-    <SectionHead eyebrow="packages" title="Simple, all-inclusive pricing">
-      <p>All packages include professional sound, backup equipment, travel within 50 miles and full planning.</p>
+    <SectionHead eyebrow={packages.eyebrow} title={packages.title}>
+      <p>{packages.lead}</p>
     </SectionHead>
     <div class="grid grid-3 packages">
-      {packages.map((pkg) => (
+      {packages.items.map((pkg) => (
         <article class:list={["package", { featured: pkg.featured }]}>
-          {pkg.featured && <p class="badge">Most popular</p>}
+          {pkg.featured && <p class="badge">{packages.badge}</p>}
           <h3>{pkg.name}</h3>
           <p class="price">{pkg.price}</p>
           <ul>
@@ -22,7 +24,7 @@ import { packages } from "../data/site";
             class:list={["btn", { "btn-outline": !pkg.featured }]}
             data-package={pkg.name}
           >
-            Enquire
+            {packages.cta}
           </a>
         </article>
       ))}
