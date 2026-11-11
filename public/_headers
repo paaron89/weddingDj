@@ -1,0 +1,4 @@
+# Response headers for Cloudflare (Workers static assets / Pages).
+# Demo site: tell search engines not to index or follow anything.
+/*
+  X-Robots-Tag: noindex, nofollow

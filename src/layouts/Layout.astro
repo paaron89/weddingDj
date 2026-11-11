@@ -18,6 +18,8 @@ const lang = getLang(Astro.currentLocale);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <!-- Demo site: keep it out of search results (also sent as a header, see public/_headers) -->
+    <meta name="robots" content="noindex, nofollow" />
     {Object.keys(languages).map((l) => (
       <link rel="alternate" hreflang={l} href={homeUrl(l as Lang)} />
     ))}

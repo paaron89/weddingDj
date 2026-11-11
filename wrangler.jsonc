@@ -1,0 +1,10 @@
+// Cloudflare Workers config: serve the built Astro site (dist/) as static files.
+// Deployed by Cloudflare's GitHub integration with `npx wrangler deploy`.
+// See docs/cloudflare-hosting.md
+{
+  "name": "weddingdj",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
