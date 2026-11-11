@@ -27,7 +27,7 @@ Cost: **€0**. Static hosting on Cloudflare is free, and so is the
    ```jsonc
    {
      "name": "weddingdj",
-     "compatibility_date": "2026-11-01",
+     "compatibility_date": "2026-10-01",
      "assets": { "directory": "./dist" }
    }
    ```
